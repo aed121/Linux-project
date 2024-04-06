@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// code struct => <project name> <text to overwrite in file> <file path>
+// example => /main "overwriting the current text with this" /home/mkrm/cproject/test4
+
+void echorite(const char *text, const char *filePath)
+{
+    FILE *file = fopen(filePath, "w");
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+
+    fprintf(file, "%s\n", text);
+
+    fclose(file);
+}
+
+int main(int argc, char **argv)
+{
+    if (argc != 3)
+    {
+        printf("Usage: %s <text> <file path>\n", argv[0]);
+        return 1;
+    }
+
+    echorite(argv[1], argv[2]);
+
+    return 0;
+}

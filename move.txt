@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+void move(char **args) {
+    if (args[1] == NULL || args[2] == NULL) {
+        fprintf(stderr, "Usage: mv <source> <destination>\n");
+        return;
+    }
+
+    char *sourcePath = args[1];
+    char *destinationPath = args[2];
+
+    char newPath[1024];
+    
+    struct stat statbuf;
+    if (stat(destinationPath, &statbuf) != -1) {
+        if (S_ISDIR(statbuf.st_mode)) {
+            snprintf(newPath, sizeof(newPath), "%s/%s", destinationPath, basename(sourcePath));
+        } else {
+            strncpy(newPath, destinationPath, sizeof(newPath));
+        }
+    } else {
+        perror("Failed to stat destination");
+        return;
+    }
+
+    if (rename(sourcePath, newPath) != 0) {
+        perror("Failed to move file");
+    }
+}
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s <source> <destination>\n", argv[0]);
+        return 1;
+    }
+
+    move(argv);
+
+    return 0;
+}
+

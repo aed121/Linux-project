@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void wordCount(char **args)
+{
+    const char *filePath = args[1];
+    int option = args[0][1];
+
+    FILE *file = fopen(filePath, "r");
+    if (file == NULL)
+    {
+        printf("Error: File not found.\n");
+        return;
+    }
+
+    int count = 0;
+    if (option == 'l')
+    {
+        char buffer[1024];
+        while (fgets(buffer, sizeof(buffer), file) != NULL)
+        {
+            count++;
+        }
+    }
+    else if (option == 'w')
+    {
+        char buffer[1024];
+        while (fgets(buffer, sizeof(buffer), file) != NULL)
+        {
+            char *token = strtok(buffer, " \t\n");
+            while (token != NULL)
+            {
+                count++;
+                token = strtok(NULL, " \t\n");
+            }
+        }
+    }
+    else
+    {
+        printf("Error: Invalid option.\n");
+        return;
+    }
+
+    fclose(file);
+
+    printf("%d\n", count);
+}
+
+int main(int argc, char **argv)
+{
+    if (argc != 3)
+    {
+        printf("Usage: %s [-l|-w] <file path>\n", argv[0]);
+        return 1;
+    }
+
+    wordCount(argv + 1);
+
+    return 0;
+}

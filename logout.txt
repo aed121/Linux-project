@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <string.h>
+
+void logout(char* str) {
+    if (strcmp(str, "exit") == 0) {
+        printf("The program is exiting.\n");
+    } else {
+        printf("The program is not exiting.\n");
+    }
+}
+
+int main() {
+    char input[10];
+    while (1) {
+        printf("Enter a string (type 'exit' to quit): ");
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';
+        logout(input);
+        if (strcmp(input, "exit") == 0) {
+            break;
+        }
+    }
+    return 0;
+}

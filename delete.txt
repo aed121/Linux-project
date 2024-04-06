@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+void delete(char *str) {
+    // Remove leading and trailing whitespace
+    while (*str == ' ' || *str == '\t') {
+        str++;
+    }
+    char *end = str + strlen(str) - 1;
+    while (end > str && (*end == ' ' || *end == '\t')) {
+        end--;
+    }
+    *(end + 1) = '\0';
+
+    // Check if the string starts and ends with double quotes
+    if (*str == '\"' && *end == '\"') {
+        // Remove the double quotes
+        str++;
+        *end = '\0';
+    }
+
+    // Delete the file
+    int status = remove(str);
+    if (status == 0) {
+        printf("File \"%s\" deleted successfully.\n", str);
+    } else {
+        printf("Error: Unable to delete file \"%s\".\n", str);
+    }
+}
+
+int main() {
+    char filepath[100]; // Assuming maximum file path length is 100 characters
+
+    printf("Enter the file path: ");
+    scanf("%99[^\n]", filepath); // Read input from the user
+
+    delete(filepath);
+    return 0;
+}

@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+char **splitArgument(char *str) {
+    char **arguments = malloc(sizeof(char *) * 100); // Assuming maximum of 100 arguments
+    if (arguments == NULL) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    char *token = strtok(str, " ");
+    int i = 0;
+    while (token != NULL) {
+        arguments[i] = malloc(strlen(token) + 1);
+        if (arguments[i] == NULL) {
+            perror("Memory allocation failed");
+            exit(EXIT_FAILURE);
+        }
+
+        strcpy(arguments[i], token);
+
+        token = strtok(NULL, " ");
+
+        i++;
+    }
+
+    arguments[i] = NULL;
+
+    return arguments;
+}
+
+int main() {
+    char str[] = "we all study in Ariel Universty";
+    char **arguments = splitArgument(str);
+
+    printf("Arguments: [");
+    for (int i = 0; arguments[i] != NULL; i++) {
+        printf("%s", arguments[i]);
+        if (arguments[i + 1] != NULL)
+            printf(", ");
+    }
+    printf("]\n");
+
+    for (int i = 0; arguments[i] != NULL; i++) {
+        free(arguments[i]);
+    }
+    free(arguments);
+
+    return 0;
+}

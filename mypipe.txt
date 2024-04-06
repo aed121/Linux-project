@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+
+void mypipe(char *input) {
+    char *token;
+    char *args1[50];
+    char *args2[50];
+    int i = 0;
+    int isArgv2 = 0;
+
+    token = strtok(input, " ");
+    while (token != NULL) {
+        if (strcmp(token, "|") == 0) {
+            isArgv2 = 1;
+            args1[i] = NULL; 
+            i = 0; 
+            token = strtok(NULL, " ");
+            continue;
+        }
+
+        if (!isArgv2) {
+            args1[i++] = token;
+        } else {
+            args2[i++] = token;
+        }
+        token = strtok(NULL, " ");
+    }
+
+    args2[i] = NULL; 
+
+    printf("Argv1: ");
+    for (int j = 0; args1[j] != NULL; j++) {
+        printf("%s ", args1[j]);
+    }
+    printf("\n");
+
+    printf("Argv2: ");
+    for (int j = 0; args2[j] != NULL; j++) {
+        printf("%s ", args2[j]);
+    }
+    printf("\n");
+}
+
+int main() {
+    char input[100];
+
+    printf("Enter command with pipe: ");
+    fgets(input, sizeof(input), stdin);
+    input[strcspn(input, "\n")] = '\0';
+
+    mypipe(input);
+
+    return 0;
+}
+

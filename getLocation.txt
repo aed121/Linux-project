@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h> // Include for malloc, free
+#include <unistd.h> // Include for getenv, gethostname
+
+void getLocation() {
+    char* username = getenv("USER"); // Get the username
+    char* hostname = malloc(256); // Allocate memory for the hostname
+    gethostname(hostname, 256); // Get the hostname
+
+    printf("\033[1;34m%s\033[0m@\033[1;32m%s\033[0m:", username, hostname); // Print username and hostname with colors
+
+    free(hostname); // Free the allocated memory
+}
+
+int main() {
+    getLocation();
+    printf("$ ");
+    return 0;
+}
